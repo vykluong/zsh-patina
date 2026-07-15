@@ -1,0 +1,104 @@
+# This theme is based on Modus Operandi by Protesilaos Stavrou (Copyright (C)
+# 2019-2026 Free Software Foundation, Inc., released under the GNU GPLv3+,
+# https://protesilaos.com/emacs/modus-themes). Modus Operandi is a light theme
+# whose foreground colors are tuned to meet the WCAG AAA contrast standard
+# (>= 7:1) against a white terminal background. The scope-to-color assignments
+# below follow the theme's own semantic syntax mappings.
+
+# comments (de-emphasized but still AAA-legible) -> fg-dim
+"comment" = "#595959"
+"punctuation.definition.comment.begin" = "#595959"
+
+# strings -> string (blue-warmer)
+"string" = "#3548cf"
+"punctuation.definition.string" = "#3548cf"
+
+# regular expressions -> rx-construct (green-cooler)
+"keyword.operator.regexp" = "#00663f"
+"keyword.control.regexp" = "#00663f"
+"meta.regexp" = "#00663f"
+
+# escape and special characters -> rx-backslash (magenta)
+"constant.character.escape" = "#721045"
+"constant.character" = "#721045"
+
+# numbers and constants -> constant (blue-cooler)
+"constant" = "#0000b0"
+"constant.numeric" = "#0000b0"
+
+# numeric file descriptors (e.g. `2> /dev/null`) -> yellow-warmer
+"constant.numeric.integer.decimal.file-descriptor" = "#884900"
+
+# variables -> variable (cyan)
+"variable" = "#005e8b"
+"variable.other" = "#005e8b"
+"punctuation.definition.variable" = "#005e8b"
+
+# parameters and command options -> variable-use (slate)
+"variable.parameter" = "#2f3f83"
+"variable.parameter.option" = "#2f3f83"
+
+# command arguments -> fg-main
+"meta.function-call.arguments" = "#000000"
+
+# commands (function calls) -> fnname-call (pink)
+"variable.function" = "#7b435c"
+
+# home directory ~ -> magenta-warmer
+"variable.language" = "#8f0075"
+"variable.language.tilde" = "#8f0075"
+
+# keywords -> keyword (magenta-cooler)
+"keyword" = "#531ab6"
+"keyword.control.case.item" = "#531ab6"
+
+# operators -> type (cyan-cooler); calm and distinct from keywords
+"keyword.operator" = "#005f5f"
+# the semicolon terminator recedes -> fg-dim
+"keyword.operator.logical.continue" = "#595959"
+
+# general foreground color -> fg-main
+"source" = "#000000"
+
+# variable assignments and declarations -> keyword (magenta-cooler)
+"storage" = "#531ab6"
+"storage.modifier" = "#531ab6"
+# types -> type (cyan-cooler)
+"storage.type" = "#005f5f"
+
+# support terms (e.g. double braces, let) -> builtin (magenta-warmer)
+"support" = "#8f0075"
+
+# function definition names -> fnname (magenta)
+"entity" = "#721045"
+"entity.name.function" = "#721045"
+
+# invalid tokens -> err (red)
+"invalid" = "#a60000"
+
+# punctuation in general recedes -> fg-dim
+"punctuation" = "#595959"
+"punctuation.section" = "#595959"
+"punctuation.terminator" = "#595959"
+
+# parameter expansion braces ${...} -> variable (cyan)
+"punctuation.section.expansion" = "#005e8b"
+
+# brace expansion {a,b} -> yellow
+"meta.group.expansion.brace" = "#6f5500"
+
+# history expansions -> magenta-warmer (draws attention)
+"meta.group.expansion.history" = "#8f0075"
+
+# reset command substitutions to the theme's default foreground color
+"meta.group.expansion.command.parens" = { foreground = "#000000" }
+
+# fallback for any token not explicitly mentioned above -> fg-main
+"meta" = "#000000"
+
+# dynamic items
+"dynamic.callable" = "#7b435c"           # existing commands (fnname-call / pink)
+"dynamic.callable.builtin" = "#8f0075"   # shell builtins (builtin / magenta-warmer)
+"dynamic.callable.alias" = "#005f5f"     # aliases (cyan-cooler)
+"dynamic.callable.missing" = "#a60000"   # not executable (err / red)
+"dynamic.path" = { underline = true }

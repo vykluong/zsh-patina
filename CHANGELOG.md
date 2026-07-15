@@ -2,6 +2,12 @@
 
 _Note: This project follows [Semantic Versioning]._
 
+## [Unreleased]
+
+**New features**
+
+- Add `modus-operandi` theme: a highly legible light theme conforming to the WCAG AAA contrast standard, based on [Modus Operandi] by Protesilaos Stavrou
+
 ## [1.12.0] - 2026-11-15
 
 **New features**
@@ -288,6 +294,7 @@ _First release._
 [Cygwin]: https://cygwin.com/
 [fsh-default-theme]: https://github.com/zdharma-continuum/fast-syntax-highlighting/blob/master/themes/default.ini
 [homebrew-core]: https://github.com/Homebrew/homebrew-core
+[Modus Operandi]: https://protesilaos.com/emacs/modus-themes
 [MSYS2]: https://www.msys2.org/
 [Nord]: https://www.nordtheme.com/
 [README]: https://github.com/michel-kraemer/zsh-patina#readme

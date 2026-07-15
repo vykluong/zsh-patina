@@ -30,6 +30,7 @@ pub enum ThemeSource {
     Classic,
     Kanagawa,
     Lavender,
+    ModusOperandi,
     Nord,
     Patina,
     Simple,
@@ -61,6 +62,7 @@ impl<'de> Deserialize<'de> for ThemeSource {
             "classic" => Ok(ThemeSource::Classic),
             "kanagawa" => Ok(ThemeSource::Kanagawa),
             "lavender" => Ok(ThemeSource::Lavender),
+            "modus-operandi" => Ok(ThemeSource::ModusOperandi),
             "nord" => Ok(ThemeSource::Nord),
             "patina" => Ok(ThemeSource::Patina),
             "simple" => Ok(ThemeSource::Simple),
@@ -86,6 +88,7 @@ impl Display for ThemeSource {
             ThemeSource::Classic => write!(f, "classic"),
             ThemeSource::Kanagawa => write!(f, "kanagawa"),
             ThemeSource::Lavender => write!(f, "lavender"),
+            ThemeSource::ModusOperandi => write!(f, "modus-operandi"),
             ThemeSource::Nord => write!(f, "nord"),
             ThemeSource::Patina => write!(f, "patina"),
             ThemeSource::Simple => write!(f, "simple"),
@@ -230,6 +233,10 @@ impl Theme {
                 .context("Unable to load kanagawa theme")?,
             ThemeSource::Lavender => toml::from_slice(include_bytes!("../themes/lavender.toml"))
                 .context("Unable to load lavender theme")?,
+            ThemeSource::ModusOperandi => {
+                toml::from_slice(include_bytes!("../themes/modus-operandi.toml"))
+                    .context("Unable to load modus-operandi theme")?
+            }
             ThemeSource::Nord => toml::from_slice(include_bytes!("../themes/nord.toml"))
                 .context("Unable to load nord theme")?,
             ThemeSource::Patina => toml::from_slice(include_bytes!("../themes/patina.toml"))
@@ -399,6 +406,71 @@ mod tests {
     fn load_builtin_without_metadata() {
         let theme = Theme::load(&ThemeSource::Patina).unwrap();
         assert!(theme.resolve("comment").is_some());
+    }
+
+    /// Every built-in theme must parse and expose the common `comment` scope.
+    /// Iterating [`ThemeSource`] ensures newly added themes are covered
+    /// automatically.
+    #[test]
+    fn all_builtin_themes_load() {
+        use strum::IntoEnumIterator;
+
+        for source in ThemeSource::iter() {
+            if matches!(source, ThemeSource::File(_)) {
+                continue;
+            }
+            let theme =
+                Theme::load(&source).unwrap_or_else(|e| panic!("failed to load `{source}': {e}"));
+            assert!(
+                theme.resolve("comment").is_some(),
+                "theme `{source}' is missing a `comment' scope"
+            );
+        }
+    }
+
+    /// The `modus-operandi` name must deserialize to the matching variant and
+    /// round-trip back to the same string.
+    #[test]
+    fn modus_operandi_name_roundtrip() {
+        #[derive(Deserialize)]
+        struct Wrapper {
+            theme: ThemeSource,
+        }
+
+        let wrapper: Wrapper = toml::from_str(r#"theme = "modus-operandi""#).unwrap();
+        assert_eq!(wrapper.theme, ThemeSource::ModusOperandi);
+        assert_eq!(ThemeSource::ModusOperandi.to_string(), "modus-operandi");
+    }
+
+    /// Spot-check that the Modus Operandi theme maps a few representative scopes
+    /// to the exact palette colors defined by the upstream theme.
+    #[test]
+    fn modus_operandi_scopes() {
+        let theme = Theme::load(&ThemeSource::ModusOperandi).unwrap();
+
+        let cases = [
+            ("comment", "#595959"),                  // fg-dim
+            ("string", "#3548cf"),                   // blue-warmer
+            ("keyword", "#531ab6"),                  // magenta-cooler
+            ("constant", "#0000b0"),                 // blue-cooler
+            ("variable.function", "#7b435c"),        // fnname-call / pink
+            ("dynamic.callable.missing", "#a60000"), // err / red
+        ];
+        for (scope, hex) in cases {
+            let style = theme
+                .resolve(scope)
+                .unwrap_or_else(|| panic!("scope `{scope}' not found"));
+            assert_eq!(
+                style.foreground,
+                Some(Color::try_from(hex).unwrap()),
+                "scope `{scope}' should map to {hex}"
+            );
+        }
+
+        // `dynamic.path' is an underline-only style with no foreground
+        let path = theme.resolve("dynamic.path").unwrap();
+        assert!(path.underline);
+        assert!(path.foreground.is_none());
     }
 
     #[test]
