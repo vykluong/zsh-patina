@@ -272,6 +272,9 @@ impl Highlighter {
                     ThemeSource::Classic => "Failed to parse classic theme".to_string(),
                     ThemeSource::Kanagawa => "Failed to parse kanagawa theme".to_string(),
                     ThemeSource::Lavender => "Failed to parse lavender theme".to_string(),
+                    ThemeSource::ModusOperandi => {
+                        "Failed to parse modus-operandi theme".to_string()
+                    }
                     ThemeSource::Nord => "Failed to parse nord theme".to_string(),
                     ThemeSource::Patina => "Failed to parse default theme".to_string(),
                     ThemeSource::Simple => "Failed to parse simple theme".to_string(),
@@ -714,6 +717,22 @@ pub mod tests {
             tempdir: dir,
             pwd,
         })
+    }
+
+    /// Building a highlighter from the Modus Operandi theme must succeed. This
+    /// exercises the full `Theme::load` -> `to_syntect` pipeline (scope
+    /// encoding included) that plain theme-parsing tests do not cover.
+    #[test]
+    fn build_modus_operandi_highlighter() -> Result<()> {
+        let config = HighlightingConfig {
+            theme: ThemeSource::ModusOperandi,
+            timeout: Duration::from_secs(3600),
+            ..Default::default()
+        };
+        let cfg = test_cfg_with(config)?;
+        // A representative command still highlights without error.
+        assert!(!cfg.highlight("echo $HOME && ls -l")?.spans.is_empty());
+        Ok(())
     }
 
     /// Test if a simple `echo` command is highlighted correctly

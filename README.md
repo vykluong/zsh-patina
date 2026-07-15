@@ -372,6 +372,7 @@ The following built-in themes are available:
 | `classic` | ANSI color theme inspired by [fast-syntax-highlighting's default theme](https://github.com/zdharma-continuum/fast-syntax-highlighting/blob/master/themes/default.ini).
 | `kanagawa` | Inspired by the colors of the famous painting by Katsushika Hokusai. Based on [kanagawa.nvim](https://github.com/rebelot/kanagawa.nvim). |
 | `lavender` | A variant with magenta/lavender tones. |
+| `modus-operandi` | A highly legible light theme meeting the WCAG AAA contrast standard. Based on [Modus Operandi](https://protesilaos.com/emacs/modus-themes) by Protesilaos Stavrou. |
 | `nord` | An arctic, north-bluish color palette. Based on [Nord](https://www.nordtheme.com/). |
 | `simple` | A minimal theme with fewer colors. |
 | `solarized` | Precision colors for machines and people. Originally by [Ethan Schoonover](https://ethanschoonover.com/solarized/).
