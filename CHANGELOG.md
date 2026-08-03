@@ -7,6 +7,7 @@ _Note: This project follows [Semantic Versioning]._
 **New features**
 
 - Add `modus-operandi` theme: a highly legible light theme conforming to the WCAG AAA contrast standard, based on [Modus Operandi] by Protesilaos Stavrou
+- Add `zsh-syntax-highlighting` theme: replicates the default colors of [zsh-syntax-highlighting] using named ANSI colors, so it follows the terminal palette
 
 ## [1.11.0] - 2026-10-08
 
@@ -280,3 +281,4 @@ _First release._
 [tokyo-night-vscode-theme]: https://github.com/enkia/tokyo-night-vscode-theme
 [troubleshooting]: https://github.com/michel-kraemer/zsh-patina#troubleshooting
 [zsh-history-substring-search]: https://github.com/zsh-users/zsh-history-substring-search
+[zsh-syntax-highlighting]: https://github.com/zsh-users/zsh-syntax-highlighting

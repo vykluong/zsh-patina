@@ -405,6 +405,7 @@ The following built-in themes are available:
 | `simple` | A minimal theme with fewer colors. |
 | `solarized` | Precision colors for machines and people. Originally by [Ethan Schoonover](https://ethanschoonover.com/solarized/).
 | `tokyonight` | Celebrates the lights of downtown Tokyo at night. Originally by [enkia](https://github.com/tokyo-night/tokyo-night-vscode-theme). |
+| `zsh-syntax-highlighting` | Replicates the default colors of [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting). Uses named ANSI colors, so it follows your terminal palette. |
 
 To load a custom theme from a file, use the `file:` prefix:
 
