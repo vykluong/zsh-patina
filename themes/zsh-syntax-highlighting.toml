@@ -1,0 +1,85 @@
+# This theme replicates the default styles of zsh-syntax-highlighting
+# (https://github.com/zsh-users/zsh-syntax-highlighting), i.e. the defaults of
+# its `main` highlighter — the only highlighter enabled out of the box. Colors
+# are named ANSI colors so they follow the terminal palette, exactly like
+# zsh-syntax-highlighting's `fg=<name>` defaults. Scopes not mentioned below
+# render with the terminal's default style, matching `default = none`.
+
+# unknown-token -> fg=red,bold
+"invalid" = { foreground = "red", bold = true }
+
+# reserved-word -> fg=yellow (if/then/fi, for, while, case, function, ...)
+"keyword.control" = "yellow"
+# ... but case patterns are ordinary words -> default
+"keyword.control.case.item" = {}
+# ... and break/continue are builtins, not reserved words -> arg0 (green)
+"keyword.control.flow.break" = "green"
+"keyword.control.flow.continue" = "green"
+"keyword.other.coproc" = "yellow"
+"storage.type.function" = "yellow"
+# { } command groups and ( ) subshells are reserved words / syntax -> fg=yellow
+"punctuation.definition.compound" = "yellow"
+# [[ and ]] are reserved words -> fg=yellow
+"support.function.double-brace" = "yellow"
+
+# arg0 (commands, builtins, functions, aliases) -> fg=green
+"variable.function" = "green"
+# [ and let are builtins -> arg0 (green)
+"support.function.test" = "green"
+"support.function.let" = "green"
+# declaration builtins (local, typeset, export, ...) -> arg0 (green)
+"storage.modifier" = "green"
+
+# precommand (sudo, command, builtin, exec, noglob, ...) -> fg=green,underline
+"precommand" = { foreground = "green", underline = true }
+"keyword.builtin" = { foreground = "green", underline = true }
+
+# commandseparator (;, &&, ||, |, &) -> none
+"keyword.operator.logical" = {}
+# ... but ! is a reserved word -> fg=yellow
+"keyword.operator.logical.not" = "yellow"
+
+# single-, double- and dollar-quoted arguments -> fg=yellow
+"string.quoted" = "yellow"
+"punctuation.definition.string" = "yellow"
+
+# dollar-double-quoted-argument ($var and ${var}) -> fg=cyan
+"variable.other.readwrite" = "cyan"
+"variable.language" = "cyan"
+"punctuation.definition.variable" = "cyan"
+"punctuation.section.expansion.parameter" = "cyan"
+# assign -> none (assignment left-hand sides are not colored)
+"variable.other.readwrite.assignment" = {}
+# the tilde in ~/path stays default; underlining comes from dynamic.path
+"variable.language.tilde" = {}
+
+# back-double-quoted-argument / back-dollar-quoted-argument (escapes) -> fg=cyan
+"constant.character.escape" = "cyan"
+
+# redirection -> fg=yellow
+"keyword.operator.assignment.redirection" = "yellow"
+# numeric-fd -> none
+"constant.numeric.integer.decimal.file-descriptor" = {}
+
+# globbing (*, ?, [abc]) -> fg=blue
+"keyword.operator.regexp" = "blue"
+"keyword.control.regexp" = "blue"
+"punctuation.separator.character-class" = "blue"
+
+# history-expansion (!!, !$, ...) -> fg=blue
+"meta.group.expansion.history" = "blue"
+
+# command-substitution-delimiter, process-substitution-delimiter and
+# back-quoted-argument-delimiter -> fg=magenta
+"punctuation.section.parens" = "magenta"
+"punctuation.section.group" = "magenta"
+
+# comment -> fg=black,bold
+"comment" = { foreground = "black", bold = true }
+"punctuation.definition.comment.begin" = { foreground = "black", bold = true }
+
+# dynamic items
+# unknown-token (command does not exist) -> fg=red,bold
+"dynamic.callable.missing" = { foreground = "red", bold = true }
+# path / path_prefix -> underline (color of the word is preserved)
+"dynamic.path" = { underline = true }

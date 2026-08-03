@@ -2,6 +2,12 @@
 
 _Note: This project follows [Semantic Versioning]._
 
+## [Unreleased]
+
+**New features**
+
+- Add `zsh-syntax-highlighting` theme: replicates the default colors of [zsh-syntax-highlighting] using named ANSI colors, so it follows the terminal palette
+
 ## [1.9.0] - 2026-07-18
 
 **New features**
@@ -227,3 +233,4 @@ _First release._
 [solarized]: https://ethanschoonover.com/solarized/
 [tokyo-night-vscode-theme]: https://github.com/enkia/tokyo-night-vscode-theme
 [zsh-history-substring-search]: https://github.com/zsh-users/zsh-history-substring-search
+[zsh-syntax-highlighting]: https://github.com/zsh-users/zsh-syntax-highlighting

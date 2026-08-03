@@ -277,6 +277,9 @@ impl Highlighter {
                     ThemeSource::Simple => "Failed to parse simple theme".to_string(),
                     ThemeSource::Solarized => "Failed to parse solarized theme".to_string(),
                     ThemeSource::TokyoNight => "Failed to parse tokyonight theme".to_string(),
+                    ThemeSource::ZshSyntaxHighlighting => {
+                        "Failed to parse zsh-syntax-highlighting theme".to_string()
+                    }
                     ThemeSource::File(path) => format!("Failed to parse theme file `{path}'"),
                 })?;
 
@@ -714,6 +717,22 @@ pub mod tests {
             tempdir: dir,
             pwd,
         })
+    }
+
+    /// Building a highlighter from the zsh-syntax-highlighting theme must
+    /// succeed. This exercises the full `Theme::load` -> `to_syntect` pipeline
+    /// (scope encoding included) that plain theme-parsing tests do not cover.
+    #[test]
+    fn build_zsh_syntax_highlighting_highlighter() -> Result<()> {
+        let config = HighlightingConfig {
+            theme: ThemeSource::ZshSyntaxHighlighting,
+            timeout: Duration::from_secs(3600),
+            ..Default::default()
+        };
+        let cfg = test_cfg_with(config)?;
+        // A representative command still highlights without error.
+        assert!(!cfg.highlight("echo $HOME && ls -l")?.spans.is_empty());
+        Ok(())
     }
 
     /// Test if a simple `echo` command is highlighted correctly
