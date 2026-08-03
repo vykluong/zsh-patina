@@ -36,6 +36,7 @@ pub enum ThemeSource {
     Simple,
     Solarized,
     TokyoNight,
+    ZshSyntaxHighlighting,
     File(String),
 }
 
@@ -68,6 +69,7 @@ impl<'de> Deserialize<'de> for ThemeSource {
             "simple" => Ok(ThemeSource::Simple),
             "solarized" => Ok(ThemeSource::Solarized),
             "tokyonight" => Ok(ThemeSource::TokyoNight),
+            "zsh-syntax-highlighting" => Ok(ThemeSource::ZshSyntaxHighlighting),
             _ if s.starts_with("file:") => Ok(ThemeSource::File(
                 shellexpand::full(&s[5..])
                     .map_err(D::Error::custom)?
@@ -94,6 +96,7 @@ impl Display for ThemeSource {
             ThemeSource::Simple => write!(f, "simple"),
             ThemeSource::Solarized => write!(f, "solarized"),
             ThemeSource::TokyoNight => write!(f, "tokyonight"),
+            ThemeSource::ZshSyntaxHighlighting => write!(f, "zsh-syntax-highlighting"),
             ThemeSource::File(path) => write!(f, "file:{path}"),
         }
     }
@@ -248,6 +251,10 @@ impl Theme {
             ThemeSource::TokyoNight => {
                 toml::from_slice(include_bytes!("../themes/tokyonight.toml"))
                     .context("Unable to load tokyonight theme")?
+            }
+            ThemeSource::ZshSyntaxHighlighting => {
+                toml::from_slice(include_bytes!("../themes/zsh-syntax-highlighting.toml"))
+                    .context("Unable to load zsh-syntax-highlighting theme")?
             }
             ThemeSource::File(path) => {
                 let theme_source = fs::read_to_string(path)
@@ -468,6 +475,67 @@ mod tests {
         }
 
         // `dynamic.path' is an underline-only style with no foreground
+        let path = theme.resolve("dynamic.path").unwrap();
+        assert!(path.underline);
+        assert!(path.foreground.is_none());
+    }
+
+    /// The `zsh-syntax-highlighting` name must deserialize to the matching
+    /// variant and round-trip back to the same string.
+    #[test]
+    fn zsh_syntax_highlighting_name_roundtrip() {
+        #[derive(Deserialize)]
+        struct Wrapper {
+            theme: ThemeSource,
+        }
+
+        let wrapper: Wrapper = toml::from_str(r#"theme = "zsh-syntax-highlighting""#).unwrap();
+        assert_eq!(wrapper.theme, ThemeSource::ZshSyntaxHighlighting);
+        assert_eq!(
+            ThemeSource::ZshSyntaxHighlighting.to_string(),
+            "zsh-syntax-highlighting"
+        );
+    }
+
+    /// Spot-check that the zsh-syntax-highlighting theme maps representative
+    /// scopes to the named ANSI colors used by the upstream defaults, and that
+    /// scopes explicitly reset to `{}` carry no style at all.
+    #[test]
+    fn zsh_syntax_highlighting_scopes() {
+        let theme = Theme::load(&ThemeSource::ZshSyntaxHighlighting).unwrap();
+
+        let cases = [
+            ("keyword.control", "yellow"),             // reserved-word
+            ("variable.function", "green"),            // arg0
+            ("string.quoted", "yellow"),               // single-/double-quoted argument
+            ("variable.other.readwrite", "cyan"),      // dollar-double-quoted-argument
+            ("keyword.operator.regexp", "blue"),       // globbing
+            ("punctuation.section.parens", "magenta"), // command-substitution-delimiter
+        ];
+        for (scope, name) in cases {
+            let style = theme
+                .resolve(scope)
+                .unwrap_or_else(|| panic!("scope `{scope}' not found"));
+            assert_eq!(
+                style.foreground,
+                Some(Color::try_from(name).unwrap()),
+                "scope `{scope}' should map to {name}"
+            );
+        }
+
+        // unknown-token -> fg=red,bold
+        let invalid = theme.resolve("invalid").unwrap();
+        assert_eq!(invalid.foreground, Some(Color::try_from("red").unwrap()));
+        assert!(invalid.bold);
+
+        // commandseparator -> none; the empty style must not fall back to a
+        // parent scope
+        let separator = theme.resolve("keyword.operator.logical").unwrap();
+        assert!(separator.foreground.is_none());
+        assert!(!separator.bold);
+        assert!(!separator.underline);
+
+        // path / path_prefix -> underline only, color of the word is preserved
         let path = theme.resolve("dynamic.path").unwrap();
         assert!(path.underline);
         assert!(path.foreground.is_none());
